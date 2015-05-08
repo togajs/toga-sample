@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * # Toga Sample Formatter
  *
@@ -7,44 +5,46 @@
  * with runnable iframed samples.
  */
 
-var through = require('through2'),
-	mixin = require('mtil/object/mixin'),
-	traverse = require('traverse'),
+import through from 'through2';
+import mixin from 'mtil/object/mixin';
+import traverse from 'traverse';
 
-	/**
-	 * Default options.
-	 */
-	defaults = {
-		keys: ['sample']
-	};
+var formatterDefaults = {
+	tags: ['sample']
+};
 
-function runnable(value, options) {
-	console.log(value, options);
-}
+export function formatter(options) {
+	options = mixin({}, formatterDefaults, options);
 
-exports.formatter = function (options) {
-	options = mixin({}, defaults, options);
+	var tags = options.tags;
 
-	var keys = options.keys;
+	function runnable(value) {
+		console.log(value, options);
+	}
 
 	function format(value) {
 		// jshint validthis:true
-		if (keys.indexOf(this.key) === -1 || !value) {
+		if (tags.indexOf(this.key) === -1 || !value) {
 			return;
 		}
 
-		this.update(runnable(value, options));
+		this.update(runnable(value));
 	}
 
-	function walk(file, enc, cb) {
-		var ast = file && file.ast;
+	return through.obj(
+		function (file, enc, cb) {
+			var ast = file && file.ast;
 
-		if (ast) {
-			traverse(ast).forEach(format);
+			if (ast) {
+				traverse(ast).forEach(format);
+			}
+
+			cb(null, file);
+		},
+		function (cb) {
+			console.log('flush sample');
+
+			cb();
 		}
-
-		cb(null, file);
-	}
-
-	return through.obj(walk);
-};
+	);
+}
