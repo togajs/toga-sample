@@ -19,27 +19,31 @@
     "url": "https://github.com/togajs/toga-sample.git"
   },
   "dependencies": {
+    "karma": "^0.12.32",
     "mtil": "^0.1.3",
     "through2": "^0.6.5",
-    "traverse": "^0.6.6"
+    "traverse": "^0.6.6",
+    "trifle": "^0.3.2"
   },
   "devDependencies": {
-    "babel": "^5.2.17",
+    "babel": "^5.4.7",
+    "babel-eslint": "^3.1.8",
     "coveralls": "^2.11.2",
-    "eslint": "^0.20.0",
+    "eslint": "^0.21.2",
     "expect": "^1.6.0",
     "isparta": "^3.0.3",
-    "mocha": "^2.2.4",
+    "mocha": "^2.2.5",
     "nodemon": "^1.3.7",
-    "tunic": "^0.3.0",
+    "toga": "^0.5.0",
+    "tunic": "^0.4.0",
     "vinyl-fs": "^1.0.0"
   },
   "scripts": {
-    "build": "babel index.js --out-file dist/index.js",
-    "cover": "babel-node ./node_modules/.bin/isparta cover --include index.js ./node_modules/.bin/_mocha -- test/*.js",
+    "all": "npm run lint && npm run test && npm run build",
+    "build": "babel src --out-dir dist",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint index.js test/*.js",
-    "test": "npm run lint && npm run cover",
-    "watch": "nodemon --exec 'npm run test' --watch index.js --watch test"
+    "lint": "eslint src/*.js test/*.js",
+    "test": "babel-node ./node_modules/.bin/isparta cover --include src/*.js ./node_modules/.bin/_mocha -- test/*.js",
+    "watch": "nodemon --exec 'npm run test' --watch src --watch test"
   }
 }
