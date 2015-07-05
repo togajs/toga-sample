@@ -12,8 +12,7 @@ import Trifle from 'trifle';
 import { add, map, src } from 'toga';
 
 var formatterDefaults = {
-	name: 'toga-sample',
-	assets: './assets'
+	name: 'toga-sample'
 };
 
 export function formatter(options) {
@@ -23,25 +22,29 @@ export function formatter(options) {
 	};
 
 	var formatterStream, assetStream,
-		{ assets, name } = options;
+		{ name } = options;
 
 	function formatSample(node, value) {
-		if (value && value.tag === 'sample') {
-			console.log(node.key, value);
+		if (!value || value.tag !== 'sample') {
+			return;
 		}
+
+		var tagList = node.parent,
+			comment = tagList.parent;
+
+		console.log('\n----\n\n', comment.node);
 	}
 
-	function toAsset(file) {
+	function toAsset(file, cb) {
 		file.isAsset = true;
 		file.fromPlugin = name;
-
-		return file;
+		cb(null, file);
 	}
 
 	formatterStream = new Trifle(options)
 		.add(formatSample);
 
-	assetStream = src(assets)
+	assetStream = src('./assets/**', { cwd: __dirname, base: __dirname })
 		.pipe(map(toAsset));
 
 	return formatterStream

@@ -1,17 +1,17 @@
 /*eslint-env mocha */
 
-import { formatter } from '../src/toga-sample';
-import Tunic from 'tunic';
-import expect from 'expect';
-import toga from 'toga';
-import { join } from 'path';
-import { readFileSync } from 'fs';
+var formatter = require('../src/toga-sample').formatter,
+	Tunic = require('tunic'),
+	expect = require('expect'),
+	toga = require('toga'),
+	join = require('path').join,
+	readFileSync = require('fs').readFileSync,
 
-var config = {
-	fixtures: join(__dirname, 'fixtures'),
-	expected: join(__dirname, 'expected'),
-	actual: join(__dirname, 'actual')
-};
+	config = {
+		fixtures: join(__dirname, 'fixtures'),
+		expected: join(__dirname, 'expected'),
+		actual: join(__dirname, 'actual')
+	};
 
 describe('toga-sample e2e', function () {
 	describe('object streams', function () {

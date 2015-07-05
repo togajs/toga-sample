@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title></title>
+</head>
+<body>
+	<script>
+		(function () {
+			function append(event) {
+				var data = event.data,
+					type = data && data.type,
+					text = data && data.text;
+
+				switch (type) {
+					case 'css':
+						return document.body
+							.insertAdjacentHTML('beforeend', '<style>' + text + '</style>');
+
+					case 'html':
+						return document.body
+							.insertAdjacentHTML('beforeend', text);
+
+					case 'js':
+						return eval(text); // eslint-disable-line
+
+					// no default
+				}
+			}
+
+			window.addEventListener('message', append, false);
+		})();
+	</script>
+</body>
+</html>
