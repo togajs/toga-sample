@@ -1,17 +1,17 @@
-/*eslint-env mocha */
+/* eslint-env mocha */
 
-var formatter = require('../src/toga-sample').formatter,
-	Tunic = require('tunic'),
-	expect = require('expect'),
-	toga = require('toga'),
-	join = require('path').join,
-	readFileSync = require('fs').readFileSync,
+import { formatter } from '../src/toga-sample';
+import Tunic from 'tunic';
+import expect from 'expect';
+import toga from 'toga';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 
-	config = {
-		fixtures: join(__dirname, 'fixtures'),
-		expected: join(__dirname, 'expected'),
-		actual: join(__dirname, 'actual')
-	};
+var config = {
+	fixtures: join(__dirname, 'fixtures'),
+	expected: join(__dirname, 'expected'),
+	actual: join(__dirname, 'actual')
+};
 
 describe('toga-sample e2e', function () {
 	describe('object streams', function () {
@@ -22,8 +22,8 @@ describe('toga-sample e2e', function () {
 			function expectFile(file) {
 				var actual = JSON.stringify(file.ast, null, 2) + '\n';
 
-				// expect(actual).toEqual(String(readFileSync(expected)));
-				file.contents = new Buffer(actual);
+				expect(actual).toEqual(String(readFileSync(expected)));
+				// file.contents = new Buffer(actual);
 			}
 
 			toga
@@ -31,7 +31,7 @@ describe('toga-sample e2e', function () {
 				.pipe(new Tunic())
 				.pipe(stream)
 				.on('data', expectFile)
-				.pipe(toga.dest(config.actual))
+				// .pipe(toga.dest(config.actual))
 				.on('error', done)
 				.on('end', done);
 		}
