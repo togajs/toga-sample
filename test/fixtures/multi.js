@@ -1,7 +1,11 @@
 /**
- * @sample {index.html} foo
- *     <div class="hi"></div>
+ * @sample
+ *     <div class="foo"></div>
  *
- * @sample {main.js} foo
- *     console.log(document.querySelectorAll('.hi'));
+ * @sample ./foo/bar.php
+ *
+ * @tag {Type} name - Description
+ *
+ * @sample
+ *     <div class="bar"></div>
  */

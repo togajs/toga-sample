@@ -9,11 +9,30 @@
  */
 
 import Trifle from 'trifle';
-import { add, map, src } from 'toga';
 
 var formatterDefaults = {
-	name: 'toga-sample'
 };
+
+function yank(arr, test) {
+	var item,
+		i = arr.length,
+		yanked = [];
+
+	while (i--) {
+		item = arr[i];
+
+		if (test(item)) {
+			yanked.unshift(item);
+			arr.splice(i, 1);
+		}
+	}
+
+	return yanked;
+}
+
+function isSample(item) {
+	return item.tag === 'sample';
+}
 
 export function formatter(options) {
 	options = {
@@ -21,32 +40,24 @@ export function formatter(options) {
 		...options
 	};
 
-	var formatterStream, assetStream,
-		{ name } = options;
+	var stream = new Trifle();
 
-	function formatSample(node, value) {
-		if (!value || value.tag !== 'sample') {
-			return;
+	function parseSamples(commentBlock) {
+		var tags = commentBlock.tags;
+
+		commentBlock.samples = yank(tags, isSample);
+
+		console.log(commentBlock);
+
+		return commentBlock;
+	}
+
+	function updateCommentBlocks(node, value) {
+		if (value && value.type === 'CommentBlock') {
+			node.update(parseSamples(value));
 		}
-
-		var tagList = node.parent,
-			comment = tagList.parent;
-
-		console.log('\n----\n\n', comment.node);
 	}
 
-	function toAsset(file, cb) {
-		file.isAsset = true;
-		file.fromPlugin = name;
-		cb(null, file);
-	}
-
-	formatterStream = new Trifle(options)
-		.add(formatSample);
-
-	assetStream = src('./assets/**', { cwd: __dirname, base: __dirname })
-		.pipe(map(toAsset));
-
-	return formatterStream
-		.pipe(add(assetStream));
+	return stream
+		.add(updateCommentBlocks);
 }

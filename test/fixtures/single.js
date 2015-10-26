@@ -1,4 +1,17 @@
 /**
- * @sample {index.html} foo
- *     <div class="hi"></div>
+ * @sample
+ *     <div class="foo"></div>
+ */
+
+/**
+ * @sample ./foo/bar.php
+ */
+
+/**
+ *
+ */
+
+/**
+ * @sample
+ *     <div class="bar"></div>
  */
